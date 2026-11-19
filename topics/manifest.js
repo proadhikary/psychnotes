@@ -1,5 +1,5 @@
 // Study order. `file` is set once a topic is written and pushed.
-window.BUILD = 9;
+window.BUILD = 10;
 window.PLAN = [
   { n: 1,  id: 'basics',        mins: 18, title: 'Basics of Psychopharmacology & Prescribing', file: '01-basics.js' },
   { n: 2,  id: 'neuro',         mins: 12, title: 'Neurotransmitters',                         file: '02-neuro.js' },
@@ -10,7 +10,7 @@ window.PLAN = [
   { n: 7,  id: 'endocrine',     mins: 12, title: 'Endocrine & Metabolic Effects, Monitoring', file: '07-endocrine.js' },
   { n: 8,  id: 'clozapine',     mins: 12, title: 'Clozapine',                                 file: '08-clozapine.js' },
   { n: 9,  id: 'lai',           mins: 10, title: 'Long-Acting Injectables (LAIs)',            file: '09-lai.js' },
-  { n: 10, id: 'antidep',       mins: 18, title: 'Antidepressants: Side Effects & Switching', file: null },
+  { n: 10, id: 'antidep',       mins: 18, title: 'Antidepressants: Side Effects & Switching', file: '10-antidep.js' },
   { n: 11, id: 'lithium',       mins: 18, title: 'Lithium & Mood Stabilizers',                file: null },
   { n: 12, id: 'sedatives',     mins: 12, title: 'Sedative-Hypnotics',                        file: null },
   { n: 13, id: 'interactions',  mins: 12, title: 'Side Effects & Drug Interactions',          file: null },
