@@ -7,12 +7,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@500&display=swap">
-<link rel="stylesheet" href="app.css">
+<link rel="stylesheet" href="app.css?v=2">
 </head>
 <body>
 <header class="bar">
   <button class="menu-btn" id="menuBtn" aria-label="Open topic list">☰ Topics</button>
   <a class="brand" href="#home">Psychopharm<span>Prep</span></a>
+  <div class="timer" id="timer" hidden>
+    <span class="t-ico">⏱</span>
+    <span class="t-time mono" id="tTime">00:00</span>
+    <button class="t-btn" id="tPause" aria-label="Pause or resume timer">⏸</button>
+    <button class="t-btn" id="tReset" aria-label="Restart timer">↺</button>
+  </div>
   <div class="bar-progress" title="Topics marked done">
     <div class="track"><div class="fill" id="progFill"></div></div>
     <span id="progText" class="mono">0/0</span>
@@ -32,7 +38,18 @@
   <main id="main" tabindex="-1"></main>
 </div>
 <div class="scrim" id="scrim"></div>
-<script src="topics/manifest.js"></script>
-<script src="app.js"></script>
+<div class="timeup" id="timeup" hidden role="alertdialog" aria-labelledby="tuMsg">
+  <div class="tu-card">
+    <div class="tu-big">⏰ Time’s up!</div>
+    <p id="tuMsg"></p>
+    <div class="tu-btns">
+      <button class="btn pri" id="tuMore">+5 minutes</button>
+      <button class="btn" id="tuNext">I’m done → next topic</button>
+      <button class="btn" id="tuStay">Close, keep reading</button>
+    </div>
+  </div>
+</div>
+<script src="topics/manifest.js?v=2"></script>
+<script src="app.js?v=2"></script>
 </body>
 </html>

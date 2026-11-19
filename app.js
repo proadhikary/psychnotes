@@ -245,10 +245,87 @@
     }
   };
 
+  // ---------- study timer ----------
+  // Starts when a topic opens (topic minutes), pauses when you leave, resumes when you return.
+  // At zero it asks: +5 minutes / next topic / keep reading.
+  const TM = { id: null, left: 0, running: false, asked: false, saved: {} };
+  try { TM.saved = JSON.parse(localStorage.getItem('psychprep-timer') || '{}'); } catch (e) {}
+  const tEl = $('#timer'), tTime = $('#tTime'), tPause = $('#tPause'), tu = $('#timeup');
+  const fmt = s => { const a = Math.abs(s); return (s < 0 ? '+' : '') + String(Math.floor(a / 60)).padStart(2, '0') + ':' + String(a % 60).padStart(2, '0'); };
+  const persistTimer = () => {
+    if (TM.id) TM.saved[TM.id] = { left: TM.left, asked: TM.asked };
+    try { localStorage.setItem('psychprep-timer', JSON.stringify(TM.saved)); } catch (e) {}
+  };
+  function drawTimer() {
+    tTime.textContent = fmt(TM.left);
+    tEl.classList.toggle('low', TM.left > 0 && TM.left <= 120);
+    tEl.classList.toggle('over', TM.left <= 0);
+    tEl.classList.toggle('paused', !TM.running);
+    tPause.textContent = TM.running ? '⏸' : '▶';
+    tEl.title = TM.left > 0 ? 'Time left for this topic' : 'Over time';
+  }
+  function beep() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      [0, 0.35, 0.7].forEach(t => {
+        const o = ctx.createOscillator(), g = ctx.createGain();
+        o.frequency.value = 880; o.connect(g); g.connect(ctx.destination);
+        g.gain.setValueAtTime(0.15, ctx.currentTime + t); g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + t + 0.25);
+        o.start(ctx.currentTime + t); o.stop(ctx.currentTime + t + 0.3);
+      });
+    } catch (e) {}
+    try { navigator.vibrate && navigator.vibrate([200, 100, 200]); } catch (e) {}
+  }
+  function askMore() {
+    const p = PLAN.find(x => x.id === TM.id);
+    $('#tuMsg').innerHTML = `Your ${p ? p.mins : ''} minutes for <b>${p ? p.title : 'this topic'}</b> are over. Need a little longer?`;
+    const idx = PLAN.indexOf(p);
+    const next = PLAN.slice(idx + 1).find(x => TOPICS[x.id]);
+    $('#tuNext').textContent = next ? `I’m done → ${next.title}` : 'I’m done → cheat sheet';
+    tu.hidden = false; $('#tuMore').focus();
+  }
+  setInterval(() => {
+    if (!TM.running || !TM.id) return;
+    TM.left--;
+    if (TM.left === 0 && !TM.asked) { TM.asked = true; beep(); askMore(); }
+    drawTimer();
+    if (TM.left % 5 === 0) persistTimer();
+  }, 1000);
+  function timerEnter(id) {
+    const p = PLAN.find(x => x.id === id);
+    if (!p || !TOPICS[id]) return timerLeave();
+    if (TM.id !== id) {
+      persistTimer();
+      const s = TM.saved[id];
+      TM.id = id; TM.left = s ? s.left : p.mins * 60; TM.asked = s ? s.asked : false;
+    }
+    TM.running = true; tEl.hidden = false; drawTimer();
+  }
+  function timerLeave() { persistTimer(); TM.running = false; tEl.hidden = true; }
+  tPause.onclick = () => { TM.running = !TM.running; drawTimer(); persistTimer(); };
+  $('#tReset').onclick = () => {
+    const p = PLAN.find(x => x.id === TM.id); if (!p) return;
+    TM.left = p.mins * 60; TM.asked = false; TM.running = true; drawTimer(); persistTimer();
+  };
+  $('#tuMore').onclick = () => {
+    TM.left = Math.max(TM.left, 0) + 5 * 60; TM.asked = false; TM.running = true;
+    tu.hidden = true; drawTimer(); persistTimer();
+  };
+  $('#tuStay').onclick = () => { tu.hidden = true; };
+  $('#tuNext').onclick = () => {
+    tu.hidden = true;
+    store.done[TM.id] = true; save();
+    const p = PLAN.find(x => x.id === TM.id);
+    const next = PLAN.slice(PLAN.indexOf(p) + 1).find(x => TOPICS[x.id]);
+    location.hash = next ? 't-' + next.id : 'cheat';
+  };
+  tu.addEventListener('keydown', e => { if (e.key === 'Escape') tu.hidden = true; });
+
   // ---------- router ----------
   function route() {
     const h = location.hash.slice(1) || 'home';
     closeNav();
+    if (h.startsWith('t-')) timerEnter(h.slice(2)); else timerLeave();
     if (h.startsWith('t-')) topicView(h.slice(2));
     else if (h === 'cheat') cheat();
     else if (h === 'mixed') mixed();
