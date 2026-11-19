@@ -1,8 +1,8 @@
 // Study order. `file` is set once a topic is written and pushed.
-window.BUILD = 1;
+window.BUILD = 2;
 window.PLAN = [
   { n: 1,  id: 'basics',        mins: 18, title: 'Basics of Psychopharmacology & Prescribing', file: '01-basics.js' },
-  { n: 2,  id: 'neuro',         mins: 12, title: 'Neurotransmitters',                         file: null },
+  { n: 2,  id: 'neuro',         mins: 12, title: 'Neurotransmitters',                         file: '02-neuro.js' },
   { n: 3,  id: 'pk',            mins: 12, title: 'Pharmacokinetics',                          file: null },
   { n: 4,  id: 'pd',            mins: 12, title: 'Pharmacodynamics',                          file: null },
   { n: 5,  id: 'antipsychotics',mins: 15, title: 'Antipsychotics: Typical vs Atypical',       file: null },
