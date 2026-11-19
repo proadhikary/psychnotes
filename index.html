@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Psychopharm Exam Prep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<header class="bar">
+  <button class="menu-btn" id="menuBtn" aria-label="Open topic list">☰ Topics</button>
+  <a class="brand" href="#home">Psychopharm<span>Prep</span></a>
+  <div class="bar-progress" title="Topics marked done">
+    <div class="track"><div class="fill" id="progFill"></div></div>
+    <span id="progText" class="mono">0/0</span>
+  </div>
+  <button class="theme-btn" id="themeBtn" aria-label="Toggle dark mode">◐</button>
+</header>
+<div class="layout">
+  <nav class="side" id="side">
+    <input id="search" type="search" placeholder="Search all notes… (e.g. lithium)" autocomplete="off">
+    <div id="searchResults"></div>
+    <a class="side-link" href="#home">🏠 Home &amp; study plan</a>
+    <a class="side-link" href="#cheat">⚡ Last-minute cheat sheet</a>
+    <a class="side-link" href="#mixed">🎯 Mixed quiz (all topics)</a>
+    <div class="side-h">Topics, in study order</div>
+    <ol id="topicList" class="topic-list"></ol>
+  </nav>
+  <main id="main" tabindex="-1"></main>
+</div>
+<div class="scrim" id="scrim"></div>
+<script src="topics/manifest.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
